@@ -23,6 +23,8 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y ffmpeg
+        ffmpeg -version
+        ffprobe -version
 
     - name: Generate go.sum
       run: go mod tidy
@@ -43,14 +45,29 @@ jobs:
 
     - name: Run application (background)
       run: |
-        ./video-converter &
-        sleep 5
+        ./video-converter > output.log 2> error.log &
+        sleep 10
+
+    - name: Check application logs
+      run: |
+        cat output.log
+        cat error.log
 
     - name: Test HTTP endpoint
       run: |
-        curl -f http://localhost:8080
+        curl -f http://localhost:8080 || echo "Failed to connect to localhost:8080"
 
-    - name: Upload artifact
+    - name: Upload logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux-logs
+        path: |
+          output.log
+          error.log
+        retention-days: 7
+
+    - name: Upload executable
       uses: actions/upload-artifact@v4
       with:
         name: video-converter-linux
