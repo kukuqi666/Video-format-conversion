@@ -54,10 +54,6 @@ jobs:
         Get-Content output.log
         Get-Content error.log
 
-    - name: Test HTTP endpoint
-      run: |
-        curl -f http://localhost:8080 || echo "Failed to connect to localhost:8080"
-
     - name: Upload logs
       if: always()
       uses: actions/upload-artifact@v4
