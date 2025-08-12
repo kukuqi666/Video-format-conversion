@@ -24,11 +24,14 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y ffmpeg
 
+    - name: Generate go.sum
+      run: go mod tidy
+
     - name: Install dependencies
       run: go get -u github.com/gin-gonic/gin github.com/gorilla/websocket
 
-    - name: Build
-      run: go build -v ./...
+    - name: Build executable
+      run: go build -o video-converter -v ./...
 
     - name: Test
       run: go test -v ./...
@@ -40,9 +43,16 @@ jobs:
 
     - name: Run application (background)
       run: |
-        go run main.go &
+        ./video-converter &
         sleep 5
 
     - name: Test HTTP endpoint
       run: |
         curl -f http://localhost:8080
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: video-converter-linux
+        path: video-converter
+        retention-days: 7

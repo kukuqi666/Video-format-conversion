@@ -25,11 +25,14 @@ jobs:
       env:
         ChocolateyInstall: C:\ProgramData\chocolatey
 
+    - name: Generate go.sum
+      run: go mod tidy
+
     - name: Install dependencies
       run: go get -u github.com/gin-gonic/gin github.com/gorilla/websocket
 
-    - name: Build
-      run: go build -v ./...
+    - name: Build executable
+      run: go build -o video-converter.exe -v ./...
 
     - name: Test
       run: go test -v ./...
@@ -41,9 +44,16 @@ jobs:
 
     - name: Run application (background)
       run: |
-        start /B go run main.go
-        timeout /t 5
+        Start-Process -FilePath .\video-converter.exe -NoNewWindow -RedirectStandardOutput "output.log" -RedirectStandardError "error.log"
+        Start-Sleep -Seconds 5
 
     - name: Test HTTP endpoint
       run: |
         curl -f http://localhost:8080
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: video-converter-windows
+        path: video-converter.exe
+        retention-days: 7

@@ -71,9 +71,19 @@ FFmpeg 是一个开源的、功能强大的多媒体处理工具，它主要用�
 
 ### 前置条件
 - **Go**：1.16 或更高版本 ([下载](https://go.dev/dl/))。
+
 - **FFmpeg**：安装 FFmpeg 和 ffprobe，确保在系统 PATH 中 ([下载](https://ffmpeg.org/download.html))。
+
 - **Git**：用于克隆和管理仓库。
+
 - **Debian系列安装ffmpeg** ：`sudo apt install ffmpeg`
+
+  
+### 下载可执行文件
+[Actions](https://github.com/kukuqi666/Video-format-conversion/actions)
+
+[Releases](https://github.com/kukuqi666/Video-format-conversion/releases/tag/v1.1.1)
+
 ### 安装步骤
 1. **克隆仓库**：
    
