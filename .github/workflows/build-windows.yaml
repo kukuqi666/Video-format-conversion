@@ -1,0 +1,49 @@
+name: Build and Test on Windows
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.21'
+
+    - name: Install FFmpeg
+      run: |
+        choco install ffmpeg -y
+      env:
+        ChocolateyInstall: C:\ProgramData\chocolatey
+
+    - name: Install dependencies
+      run: go get -u github.com/gin-gonic/gin github.com/gorilla/websocket
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
+
+    - name: Create directories
+      run: |
+        mkdir Uploads
+        mkdir outputs
+
+    - name: Run application (background)
+      run: |
+        start /B go run main.go
+        timeout /t 5
+
+    - name: Test HTTP endpoint
+      run: |
+        curl -f http://localhost:8080

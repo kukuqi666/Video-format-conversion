@@ -1,0 +1,28 @@
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.sum
+
+# Directories
+Uploads/
+outputs/
+progress.txt
+
+# Temporary files
+*.log
+*.tmp
+*.temp
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+Video-format-conversion
+Video-format-conversion.exe
